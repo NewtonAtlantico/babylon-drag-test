@@ -13,10 +13,13 @@ export function createRedSpherePointerDragBehavior(meshes) {
         console.log(event);
     });
     redSphereDragBehavior.onDragObservable.add((event) => {
-        greenBox.position.x = greenBox.position.x + event.dragDistance;
-        blueBox.position.x = blueBox.position.x + event.dragDistance;
-        purpleDonut.position.x = purpleDonut.position.x + event.dragDistance;
-        whiteBox.position.x = whiteBox.position.x + event.dragDistance;
+        console.log('event', event)
+        greenBox.position.z = greenBox.position.z + event.dragDistance;
+        blueBox.position.x = blueBox.position.x - event.dragDistance;
+        purpleDonut.position.z = purpleDonut.position.z - event.dragDistance;
+
+        whiteBox.scaling.x = whiteBox.scaling.x - (event.dragDistance/50);
+        whiteBox.scaling.z = whiteBox.scaling.z - (event.dragDistance/50);
     });
     redSphereDragBehavior.onDragEndObservable.add((event) => {
         console.log("dragEnd");
@@ -26,6 +29,7 @@ export function createRedSpherePointerDragBehavior(meshes) {
     redSphere.addBehavior(redSphereDragBehavior);
 }
 
+//Move vertically
 export function createGreenBoxPointerDragBehavior(meshes) {
     const [redSphere, greenBox, blueBox, purpleDonut, whiteBox] = meshes
     const greenBoxDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(0, 0, 1) });
@@ -49,6 +53,7 @@ export function createGreenBoxPointerDragBehavior(meshes) {
     greenBox.addBehavior(greenBoxDragBehavior);
 }
 
+// Move Horizontally
 export function createBlueBoxPointerDragBehavior(meshes) {
     const [redSphere, greenBox, blueBox, purpleDonut, whiteBox] = meshes
     const blueBoxDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(1, 0, 0) });
@@ -72,6 +77,8 @@ export function createBlueBoxPointerDragBehavior(meshes) {
     blueBox.addBehavior(blueBoxDragBehavior);
 }
 
+
+//Rotate the white box
 export function createPurpleDonutPointerDragBehavior(meshes) {
     const [, , , purpleDonut, whiteBox] = meshes
     const purpleDonutDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(1, 0, 0) });
