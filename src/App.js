@@ -9,12 +9,11 @@ import {
   StandardMaterial,
   PointerDragBehavior
 } from "@babylonjs/core";
+
 import SceneComponent from "./components/SceneComponent/SceneComponent";
+import {createBlueBoxPointerDragBehavior, createGreenBoxPointerDragBehavior, createPurpleDonutPointerDragBehavior, createRedSpherePointerDragBehavior} from './utils'
 
 function App() {
-
-  const [groundMesh, setGroundMesh] = React.useState(null);
-  const [meshes, setMeshes] = React.useState({});
   const [onRender, setOnRender] = React.useState((scene) => { })
 
   const createScene = (scene) => {
@@ -61,6 +60,9 @@ function App() {
     ground.material = groundMaterial;
 
     // Meshes
+    var whiteBox = MeshBuilder.CreateBox("white", {size: 30}, scene);
+    whiteBox.position.y = 10;
+
     var redSphere = MeshBuilder.CreateSphere("red", { diameter: 20 }, scene);
     redSphere.material = redMat;
     redSphere.position.y = 10;
@@ -81,49 +83,23 @@ function App() {
     purpleDonut.position.y = 10;
     purpleDonut.position.z += 100;
 
-    var startingPoint;
-    var currentMesh;
+    const meshes = [redSphere, greenBox, blueBox, purpleDonut, whiteBox]
 
-    var getGroundPosition = function () {
-      var pickinfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh == ground; });
-      if (pickinfo.hit) {
-        return pickinfo.pickedPoint;
-      }
-
-      return null;
-    }
-
-    const redSphereDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(1, 0, 0) });
-    redSphereDragBehavior.useObjectOrientationForDragging = false
-
-    redSphereDragBehavior.onDragStartObservable.add((event) => {
-      console.log("dragStart");
-      console.log(event);
-    })
-    redSphereDragBehavior.onDragObservable.add((event) => {
-      console.log("drag");
-      console.log(event);
-      console.log('greeBox', greenBox.position)
-      greenBox.position.x = greenBox.position.x + event.dragDistance
-      //greenBox.addBehavior(pointerDragBehavior)
-    })
-    redSphereDragBehavior.onDragEndObservable.add((event) => {
-      console.log("dragEnd");
-      console.log(event);
-    })
-
-    redSphere.addBehavior(redSphereDragBehavior)
-
+    createRedSpherePointerDragBehavior(meshes);
+    createGreenBoxPointerDragBehavior(meshes);
+    createBlueBoxPointerDragBehavior(meshes);
+    createPurpleDonutPointerDragBehavior(meshes);
 
     return scene;
   }
 
   return (
     <div>
-      teste
       <SceneComponent antialias onSceneReady={createScene} onRender={onRender} />
     </div>
   );
 }
 
 export default App;
+
+

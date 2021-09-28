@@ -1,0 +1,95 @@
+import {
+    Vector3,
+    PointerDragBehavior,
+} from "@babylonjs/core";
+
+export function createRedSpherePointerDragBehavior(meshes) {
+    const [redSphere, greenBox, blueBox, purpleDonut, whiteBox] = meshes
+    const redSphereDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(1, 0, 0) });
+    redSphereDragBehavior.useObjectOrientationForDragging = false;
+
+    redSphereDragBehavior.onDragStartObservable.add((event) => {
+        console.log("dragStart");
+        console.log(event);
+    });
+    redSphereDragBehavior.onDragObservable.add((event) => {
+        greenBox.position.x = greenBox.position.x + event.dragDistance;
+        blueBox.position.x = blueBox.position.x + event.dragDistance;
+        purpleDonut.position.x = purpleDonut.position.x + event.dragDistance;
+        whiteBox.position.x = whiteBox.position.x + event.dragDistance;
+    });
+    redSphereDragBehavior.onDragEndObservable.add((event) => {
+        console.log("dragEnd");
+        console.log(event);
+    });
+
+    redSphere.addBehavior(redSphereDragBehavior);
+}
+
+export function createGreenBoxPointerDragBehavior(meshes) {
+    const [redSphere, greenBox, blueBox, purpleDonut, whiteBox] = meshes
+    const greenBoxDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(0, 0, 1) });
+    greenBoxDragBehavior.useObjectOrientationForDragging = false;
+
+    greenBoxDragBehavior.onDragStartObservable.add((event) => {
+        console.log("dragStart");
+        console.log(event);
+    });
+    greenBoxDragBehavior.onDragObservable.add((event) => {
+        redSphere.position.z = redSphere.position.z + event.dragDistance;
+        blueBox.position.z = blueBox.position.z + event.dragDistance;
+        purpleDonut.position.z = purpleDonut.position.z + event.dragDistance;
+        whiteBox.position.z = whiteBox.position.z + event.dragDistance;
+    });
+    greenBoxDragBehavior.onDragEndObservable.add((event) => {
+        console.log("dragEnd");
+        console.log(event);
+    });
+
+    greenBox.addBehavior(greenBoxDragBehavior);
+}
+
+export function createBlueBoxPointerDragBehavior(meshes) {
+    const [redSphere, greenBox, blueBox, purpleDonut, whiteBox] = meshes
+    const blueBoxDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(1, 0, 0) });
+    blueBoxDragBehavior.useObjectOrientationForDragging = false;
+
+    blueBoxDragBehavior.onDragStartObservable.add((event) => {
+        console.log("dragStart");
+        console.log(event);
+    });
+    blueBoxDragBehavior.onDragObservable.add((event) => {
+        greenBox.position.x = greenBox.position.x + event.dragDistance;
+        redSphere.position.x = redSphere.position.x + event.dragDistance;
+        purpleDonut.position.x = purpleDonut.position.x + event.dragDistance;
+        whiteBox.position.x = whiteBox.position.x + event.dragDistance;
+    });
+    blueBoxDragBehavior.onDragEndObservable.add((event) => {
+        console.log("dragEnd");
+        console.log(event);
+    });
+
+    blueBox.addBehavior(blueBoxDragBehavior);
+}
+
+export function createPurpleDonutPointerDragBehavior(meshes) {
+    const [, , , purpleDonut, whiteBox] = meshes
+    const purpleDonutDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(1, 0, 0) });
+    purpleDonutDragBehavior.useObjectOrientationForDragging = false;
+
+    purpleDonutDragBehavior.onDragStartObservable.add((event) => {
+        console.log("dragStart");
+        console.log(event);
+    });
+    purpleDonutDragBehavior.onDragObservable.add((event) => {
+        console.log('event', event)
+        whiteBox.rotation.y = whiteBox.rotation.y + (event.dragDistance/50);
+    });
+    purpleDonutDragBehavior.onDragEndObservable.add((event) => {
+        console.log("dragEnd");
+        console.log(event);
+    });
+
+    purpleDonutDragBehavior.moveAttached = false;
+    purpleDonut.addBehavior(purpleDonutDragBehavior);
+}
