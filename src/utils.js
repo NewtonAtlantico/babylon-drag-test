@@ -7,19 +7,32 @@ export function createRedSpherePointerDragBehavior(meshes) {
     const [redSphere, greenBox, blueBox, purpleDonut, whiteBox] = meshes
     const redSphereDragBehavior = new PointerDragBehavior({ dragAxis: new Vector3(1, 0, 0) });
     redSphereDragBehavior.useObjectOrientationForDragging = false;
+    let canDrag = true;
+
+    redSphereDragBehavior.validateDrag = targetPosition => {
+        if (targetPosition.x > -65) {
+            canDrag = false
+            return false
+        }
+        canDrag = true
+        return true
+    }
 
     redSphereDragBehavior.onDragStartObservable.add((event) => {
         console.log("dragStart");
         console.log(event);
     });
     redSphereDragBehavior.onDragObservable.add((event) => {
-        console.log('event', event)
-        greenBox.position.z = greenBox.position.z + event.dragDistance;
-        blueBox.position.x = blueBox.position.x - event.dragDistance;
-        purpleDonut.position.z = purpleDonut.position.z - event.dragDistance;
 
-        whiteBox.scaling.x = whiteBox.scaling.x - (event.dragDistance/50);
-        whiteBox.scaling.z = whiteBox.scaling.z - (event.dragDistance/50);
+        if (canDrag && (whiteBox.scaling.x > 0 || event.dragDistance < 0)) {
+            redSphereDragBehavior.moveAttached = true
+            greenBox.position.z = greenBox.position.z + event.dragDistance;
+            blueBox.position.x = blueBox.position.x - event.dragDistance;
+            purpleDonut.position.z = purpleDonut.position.z - event.dragDistance;
+
+            whiteBox.scaling.x = whiteBox.scaling.x - (event.dragDistance / 50);
+            whiteBox.scaling.z = whiteBox.scaling.z - (event.dragDistance / 50);
+        }
     });
     redSphereDragBehavior.onDragEndObservable.add((event) => {
         console.log("dragEnd");
@@ -90,7 +103,7 @@ export function createPurpleDonutPointerDragBehavior(meshes) {
     });
     purpleDonutDragBehavior.onDragObservable.add((event) => {
         console.log('event', event)
-        whiteBox.rotation.y = whiteBox.rotation.y + (event.dragDistance/50);
+        whiteBox.rotation.y = whiteBox.rotation.y + (event.dragDistance / 50);
     });
     purpleDonutDragBehavior.onDragEndObservable.add((event) => {
         console.log("dragEnd");
